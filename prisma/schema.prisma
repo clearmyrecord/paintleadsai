@@ -1,0 +1,15 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum LeadScore { Hot Warm LowFit }
+enum LeadStatus { New Contacted Qualified AppointmentBooked Showed NoShow Won Lost ReplacementNeeded }
+enum AppointmentStatus { Booked Confirmed Showed NoShow Won Lost }
+enum MessageChannel { Email SMS }
+enum MessageDirection { Outbound Inbound }
+
+model Contractor { id String @id @default(cuid()) name String companyName String email String @unique phone String? calendlyUrl String? createdAt DateTime @default(now()) leads Lead[] appointments Appointment[] campaigns Campaign[] serviceAreas ServiceArea[] }
+model Lead { id String @id @default(cuid()) contractorId String? contractor Contractor? @relation(fields:[contractorId], references:[id]) name String phone String email String @unique zipCode String projectType String propertyType String squareFootage Int? budget Int timeline String preferredContactMethod String notes String? leadScore LeadScore status LeadStatus @default(New) ownsProperty Boolean @default(true) createdAt DateTime @default(now()) appointments Appointment[] messageLogs MessageLog[] }
+model Appointment { id String @id @default(cuid()) contractorId String contractor Contractor @relation(fields:[contractorId], references:[id]) leadId String lead Lead @relation(fields:[leadId], references:[id]) scheduledAt DateTime status AppointmentStatus @default(Booked) replacementNeeded Boolean @default(false) createdAt DateTime @default(now()) }
+model MessageLog { id String @id @default(cuid()) leadId String? lead Lead? @relation(fields:[leadId], references:[id]) channel MessageChannel direction MessageDirection @default(Outbound) recipient String subject String? body String status String @default("mocked") createdAt DateTime @default(now()) }
+model Campaign { id String @id @default(cuid()) contractorId String contractor Contractor @relation(fields:[contractorId], references:[id]) name String source String budget Int? active Boolean @default(true) createdAt DateTime @default(now()) }
+model ServiceArea { id String @id @default(cuid()) contractorId String contractor Contractor @relation(fields:[contractorId], references:[id]) zipCode String city String? active Boolean @default(true) @@unique([contractorId, zipCode]) }

@@ -1,0 +1,2 @@
+import { NextResponse } from 'next/server';
+export async function POST(req: Request) { const form = await req.formData(); const email = String(form.get('email')); const ok = email === (process.env.ADMIN_EMAIL || 'admin@paintleads.ai'); const res = NextResponse.redirect(new URL(ok ? '/admin' : '/admin/settings', req.url), 303); if (ok) res.cookies.set('paintleads_admin', 'true', { httpOnly: true, sameSite: 'lax' }); return res; }

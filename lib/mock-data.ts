@@ -1,0 +1,9 @@
+import { scoreLead } from './scoring';
+export const sampleContractor = { id: 'demo-contractor', name: 'Avery Brooks', companyName: 'Brooks Premier Painting', email: 'admin@paintleads.ai', phone: '+15551234567', calendlyUrl: '' };
+export const sampleLeads = [
+  { id:'lead-1', name:'Mia Carter', phone:'(555) 010-1100', email:'mia@example.com', zipCode:'30301', projectType:'Interior painting', propertyType:'Single-family home', squareFootage:2200, budget:3200, timeline:'Within 30 days', preferredContactMethod:'Phone', notes:'Kitchen, foyer, and bedrooms.', leadScore:'Hot', status:'AppointmentBooked', createdAt:new Date().toISOString() },
+  { id:'lead-2', name:'Noah Patel', phone:'(555) 010-2200', email:'noah@example.com', zipCode:'30305', projectType:'Exterior painting', propertyType:'Townhome', squareFootage:1800, budget:1250, timeline:'30-90 days', preferredContactMethod:'Email', notes:'HOA color approval pending.', leadScore:'Warm', status:'Qualified', createdAt:new Date().toISOString() },
+  { id:'lead-3', name:'Sofia Lee', phone:'(555) 010-3300', email:'sofia@example.com', zipCode:'30030', projectType:'Not sure', propertyType:'Renter', squareFootage:900, budget:500, timeline:'Just researching', preferredContactMethod:'SMS', notes:'Apartment touch-up.', leadScore:'LowFit', status:'ReplacementNeeded', createdAt:new Date().toISOString() }
+];
+export const sampleAppointments = [{ id:'appt-1', leadId:'lead-1', leadName:'Mia Carter', scheduledAt:new Date(Date.now()+86400000).toISOString(), status:'Booked', replacementNeeded:false }];
+export const dashboardStats = { totalLeads: sampleLeads.length, qualifiedLeads: sampleLeads.filter(l => ['Hot','Warm'].includes(l.leadScore)).length, bookedEstimates: sampleAppointments.length, showRate: 78, noShowRate: 12, closedJobs: 4, costPerBookedEstimate: '$75 placeholder', revenueWon: '$18,500 placeholder' };
