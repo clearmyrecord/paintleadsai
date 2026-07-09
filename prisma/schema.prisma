@@ -18,7 +18,7 @@ enum LeadStatus {
   Contacted
   Qualified
   AppointmentBooked
-  Showed
+  EstimateCompleted
   NoShow
   Won
   Lost
@@ -77,6 +77,12 @@ model Lead {
   status                 LeadStatus   @default(New)
   ownsProperty           Boolean      @default(true)
   createdAt              DateTime     @default(now())
+  estimateAmount         Int?
+  jobValue               Int?
+  closeDate              DateTime?
+  salesNotes             String?
+  assignedContractor     String?
+  revenueGenerated       Int?
   appointments           Appointment[]
   messageLogs            MessageLog[]
 }
