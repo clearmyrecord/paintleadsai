@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export function Nav() { return <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5"><Link href="/" className="text-xl font-black text-brand">PaintLeadAI</Link><div className="flex gap-3"><Link className="btn-secondary" href="/book">Get Free Estimate</Link><Link className="btn-secondary" href="/admin">Contractor Login</Link><a className="btn-primary" href="mailto:sales@paintleads.ai">Book Demo</a></div></nav>; }

@@ -1,0 +1,3 @@
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+export async function POST(req: Request) { const form = await req.formData(); const id = String(form.get('id')); const status = String(form.get('status')); try { await prisma.appointment.update({ where: { id }, data: { status: status as any, replacementNeeded: status === 'NoShow' } }); if (status === 'NoShow') { const appt = await prisma.appointment.findUnique({ where: { id } }); if (appt) await prisma.lead.update({ where: { id: appt.leadId }, data: { status: 'ReplacementNeeded' } }); } } catch (e) { console.warn('Mock appointment update', e); } return NextResponse.redirect(new URL('/admin/appointments', req.url), 303); }

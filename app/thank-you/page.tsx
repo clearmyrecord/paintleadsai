@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function Thanks(){return <main className="mx-auto grid min-h-screen max-w-2xl place-items-center px-6"><div className="card text-center"><h1 className="text-4xl font-black">Thanks — your request is in!</h1><p className="mt-4 text-slate-600">We scored your project and sent confirmation details. A contractor will follow up to confirm your estimate appointment.</p><Link className="btn-primary mt-8" href="/">Back home</Link></div></main>}
