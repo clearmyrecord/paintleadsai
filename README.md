@@ -39,6 +39,8 @@ If Resend, Twilio, or PostgreSQL are unavailable, the app falls back to mock not
 
 ## Setup
 
+Use Node.js 20 or newer. The project pins compatible Next.js 15, React 19, Prisma 6, and Tailwind CSS 4 packages.
+
 ```bash
 npm install
 npx prisma generate
