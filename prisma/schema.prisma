@@ -95,26 +95,27 @@ model Appointment {
   lead               Lead              @relation(fields: [leadId], references: [id])
   contractorId       String
   contractor         Contractor        @relation(fields: [contractorId], references: [id])
-  provider           String            @default("cal.com")
+  provider           String            @default("calendly")
   externalBookingId  String            @unique
-  eventTypeId        String?
+  externalEventUri   String?
+  externalInviteeUri String?           @unique
   scheduledAt        DateTime
   endsAt             DateTime?
   timezone           String
-  locationType       String?
   meetingLocation    String?
   status             AppointmentStatus @default(Booked)
   cancellationReason String?
   rescheduleUrl      String?
   cancellationUrl    String?
   replacementNeeded  Boolean           @default(false)
-  reminder24hSentAt  DateTime?
-  reminder2hSentAt   DateTime?
+  reminder24HourSentAt DateTime?
+  reminder2HourSentAt  DateTime?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
 
   @@index([leadId])
   @@index([contractorId])
+  @@index([externalEventUri])
   @@index([scheduledAt])
 }
 

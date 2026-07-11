@@ -1,17 +1,19 @@
 import { NextResponse } from 'next/server';
-import { bookingFromPayload, upsertAppointment, verifyCalComSignature } from '@/lib/scheduling';
+import { calendlyBookingFromPayload, cancelAppointmentByInviteeUri, verifyCalendlySignature, upsertAppointment } from '@/lib/scheduling';
 
 export async function POST(req: Request) {
   const raw = await req.text();
-  const signature = req.headers.get('x-cal-signature-256') || req.headers.get('cal-signature-256') || req.headers.get('x-cal-signature');
-  if (!verifyCalComSignature(raw, signature)) return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+  const signature = req.headers.get('calendly-webhook-signature');
+  if (!verifyCalendlySignature(raw, signature)) return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   let body: any;
   try { body = JSON.parse(raw); } catch { return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 }); }
-  const trigger = String(body?.triggerEvent || body?.event || '').toUpperCase();
+  const event = String(body?.event || '').toLowerCase();
   try {
-    if (trigger.includes('CANCEL')) await upsertAppointment(bookingFromPayload(body), 'Cancelled');
-    else if (trigger.includes('RESCHEDULE')) await upsertAppointment(bookingFromPayload(body), 'Rescheduled');
-    else if (trigger.includes('CREATED') || trigger.includes('BOOKING')) await upsertAppointment(bookingFromPayload(body), 'Booked');
+    if (event === 'invitee.created') await upsertAppointment(calendlyBookingFromPayload(body), 'Booked');
+    else if (event === 'invitee.canceled') {
+      const booking = calendlyBookingFromPayload(body);
+      await cancelAppointmentByInviteeUri(booking.externalInviteeUri || booking.externalBookingId, booking.cancellationReason);
+    }
     return NextResponse.json({ ok: true });
-  } catch (e) { return NextResponse.json({ error: 'Webhook not processed' }, { status: 400 }); }
+  } catch { return NextResponse.json({ error: 'Webhook not processed' }, { status: 400 }); }
 }

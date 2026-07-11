@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   if (type.includes('application/json')) {
     try {
       const body = await req.json();
-      const appt = await upsertAppointment({ leadId: String(body.leadId), externalBookingId: String(body.externalBookingId), eventTypeId: null, scheduledAt: new Date(String(body.scheduledAt)), endsAt: body.endsAt ? new Date(String(body.endsAt)) : null, timezone: String(body.timezone || 'UTC'), locationType: 'mock', meetingLocation: String(body.meetingLocation || 'Mock appointment'), rescheduleUrl: null, cancellationUrl: null, cancellationReason: null }, 'Booked');
+      const appt = await upsertAppointment({ leadId: String(body.leadId), externalBookingId: String(body.externalBookingId), externalEventUri: body.externalEventUri ? String(body.externalEventUri) : null, externalInviteeUri: body.externalInviteeUri ? String(body.externalInviteeUri) : null, scheduledAt: new Date(String(body.scheduledAt)), endsAt: body.endsAt ? new Date(String(body.endsAt)) : null, timezone: String(body.timezone || 'UTC'), meetingLocation: String(body.meetingLocation || 'Mock appointment'), rescheduleUrl: null, cancellationUrl: null, cancellationReason: null, provider: 'mock' }, 'Booked');
       return NextResponse.json({ id: appt.id });
     } catch (e) { return NextResponse.json({ error: 'Unable to create appointment' }, { status: 400 }); }
   }

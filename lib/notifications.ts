@@ -15,5 +15,5 @@ export async function sendSms(to: string, body: string) {
 }
 
 export async function scheduleAppointmentReminderPlaceholder(appointmentId: string, hoursBefore: 24 | 2) {
-  return { status: 'placeholder', provider: 'twilio', appointmentId, hoursBefore, duplicateGuard: `reminder${hoursBefore}hSentAt` };
+  return { status: 'placeholder', provider: 'twilio', appointmentId, hoursBefore, duplicateGuard: hoursBefore === 24 ? 'reminder24HourSentAt' : 'reminder2HourSentAt' };
 }
