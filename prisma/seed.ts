@@ -13,7 +13,7 @@ async function main(){
   await prisma.lead.upsert({ where:{ email }, update:{}, create:{ contractorId:contractor.id,name,phone,email,zipCode,projectType,propertyType,squareFootage,budget,timeline,preferredContactMethod,notes,ownsProperty,leadScore,status: leadScore==='LowFit'?'ReplacementNeeded':'Qualified' }});
  }
  const mia = await prisma.lead.findUnique({ where:{ email:'mia@example.com' }});
- if (mia) await prisma.appointment.create({ data:{ contractorId:contractor.id, leadId:mia.id, scheduledAt:new Date(Date.now()+86400000), status:'Booked' }});
+ if (mia) await prisma.appointment.create({ data:{ contractorId:contractor.id, leadId:mia.id, scheduledAt:new Date(Date.now()+86400000), status:'Booked', externalBookingId:'seed-mia-appointment', externalEventUri:'seed:event:mia', externalInviteeUri:'seed:invitee:mia', timezone:'America/New_York', meetingLocation:'Customer home' }});
  await prisma.campaign.create({ data:{ contractorId:contractor.id, name:'Spring exterior estimates', source:'Meta Ads', budget:2500 }});
  await prisma.serviceArea.createMany({ data:['30301','30305','30030'].map(zipCode=>({ contractorId:contractor.id, zipCode })), skipDuplicates:true });
 }

@@ -9,7 +9,7 @@ export async function getLeads() {
 }
 
 export async function getAppointments() {
-  try { return await prisma.appointment.findMany({ include: { lead: true }, orderBy: { scheduledAt: 'asc' } }); } catch { return sampleAppointments as any; }
+  try { return await prisma.appointment.findMany({ include: { lead: true, contractor: true }, orderBy: { scheduledAt: 'asc' } }); } catch { return sampleAppointments as any; }
 }
 
 export async function getStats() {
@@ -24,7 +24,9 @@ export async function getStats() {
   const estimatedRevenue = leads.reduce((sum, l) => sum + Number(l.revenueGenerated || l.jobValue || 0), 0);
   const showRate = appointmentsBooked ? Math.round((showed / appointmentsBooked) * 100) : dashboardStats.showRate;
   const noShowRate = appointmentsBooked ? Math.round((noShows / appointmentsBooked) * 100) : dashboardStats.noShowRate;
+  const upcomingAppointments = appts.filter((a) => new Date(a.scheduledAt).getTime() >= Date.now()).slice(0, 5);
   return {
+    upcomingAppointments,
     totalLeads,
     qualifiedLeads,
     appointmentsBooked,

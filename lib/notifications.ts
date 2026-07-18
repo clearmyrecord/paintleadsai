@@ -13,3 +13,7 @@ export async function sendSms(to: string, body: string) {
   const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
   return client.messages.create({ from: TWILIO_PHONE_NUMBER, to, body });
 }
+
+export async function scheduleAppointmentReminderPlaceholder(appointmentId: string, hoursBefore: 24 | 2) {
+  return { status: 'placeholder', provider: 'twilio', appointmentId, hoursBefore, duplicateGuard: hoursBefore === 24 ? 'reminder24HourSentAt' : 'reminder2HourSentAt' };
+}

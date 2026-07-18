@@ -47,5 +47,5 @@ export async function POST(req: Request) {
   await sendEmail({ to: String(data.email), subject: 'Your free painting estimate request', body: `Thanks ${data.name}. We received your ${data.projectType} request and will follow up shortly to help schedule your free estimate.` });
   await sendEmail({ to: process.env.ADMIN_EMAIL || sampleContractor.email, subject: `New ${leadScore} painting estimate request`, body: `${data.name} requested an estimate in ${data.zipCode}. Budget: $${budget}. Timeline: ${data.timeline}. Lead: ${leadId}` });
   if (preferredContactMethod === 'SMS') await sendSms(String(data.phone), 'PaintLeadAI received your estimate request. We will follow up shortly.');
-  return NextResponse.redirect(new URL('/thank-you', req.url), 303);
+  return NextResponse.redirect(new URL(`/book/schedule?leadId=${leadId}`, req.url), 303);
 }
